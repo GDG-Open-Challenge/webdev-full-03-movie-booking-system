@@ -6,6 +6,7 @@ const Movie = require('../models/Movie');
 
 router.post('/', async (req, res) => {
   try {
+    
     const { movieId, userId, seats } = req.body;
     const movie = await Movie.findById(movieId);
 
