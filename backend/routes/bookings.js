@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ message: 'Movie not found' });
     }
 
-    const totalPrice = movie.price * 1;
+    const totalPrice = movie.price * seats;
 
     const booking = new Booking({
       movieId,
