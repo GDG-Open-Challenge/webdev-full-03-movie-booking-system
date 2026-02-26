@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './Checkout.css';
+import React, { useState } from "react";
+import axios from "axios";
+import "./Checkout.css";
 
 function Checkout({ movie, seats, userId, onBack }) {
   const [loading, setLoading] = useState(false);
@@ -11,8 +11,26 @@ function Checkout({ movie, seats, userId, onBack }) {
   const handleConfirmBooking = async () => {
     setLoading(true);
 
-    console.log('Booking confirmed with seats:', seats);
-    console.log('Total price:', totalPrice);
+    console.log("Booking confirmed with seats:", seats);
+    console.log("Total price:", totalPrice);
+
+    try {
+      const response = await axios.post("http://localhost:5000/bookings", {
+        movieId: movie._id,
+        userId: userId,
+        seats: seats,
+        totalAmount: totalPrice,
+      });
+
+      console.log("Booking response:", response.data);
+
+      setBookingConfirmed(true);
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Booking failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
 
     setBookingConfirmed(true);
     setLoading(false);
@@ -28,13 +46,14 @@ function Checkout({ movie, seats, userId, onBack }) {
               Movie: <strong>{movie.title}</strong>
             </p>
             <p className="confirmation-details">
-              Seats: <strong>{seats.join(', ')}</strong>
+              Seats: <strong>{seats.join(", ")}</strong>
             </p>
             <p className="confirmation-details">
               Total Amount: <strong>₹{totalPrice}</strong>
             </p>
             <p className="confirmation-details">
-              Your booking has been confirmed. Please check your email for details.
+              Your booking has been confirmed. Please check your email for
+              details.
             </p>
             <button onClick={onBack}>Book Another Movie</button>
           </div>
@@ -59,7 +78,7 @@ function Checkout({ movie, seats, userId, onBack }) {
           </div>
           <div className="summary-item">
             <span>Seats:</span>
-            <span>{seats.join(', ')}</span>
+            <span>{seats.join(", ")}</span>
           </div>
           <div className="summary-item">
             <span>Number of Seats:</span>
@@ -88,11 +107,20 @@ function Checkout({ movie, seats, userId, onBack }) {
             </div>
             <div className="form-group">
               <label>Phone Number</label>
-              <input type="tel" placeholder="Enter your phone number" required />
+              <input
+                type="tel"
+                placeholder="Enter your phone number"
+                required
+              />
             </div>
             <div className="form-group">
               <label>Card Number</label>
-              <input type="text" placeholder="1234 5678 9012 3456" maxLength="19" required />
+              <input
+                type="text"
+                placeholder="1234 5678 9012 3456"
+                maxLength="19"
+                required
+              />
             </div>
             <div className="form-row">
               <div className="form-group">
@@ -111,7 +139,7 @@ function Checkout({ movie, seats, userId, onBack }) {
             onClick={handleConfirmBooking}
             disabled={loading}
           >
-            {loading ? 'Processing...' : 'Confirm Booking'}
+            {loading ? "Processing..." : "Confirm Booking"}
           </button>
         </div>
       </div>
