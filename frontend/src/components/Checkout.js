@@ -31,9 +31,6 @@ function Checkout({ movie, seats, userId, onBack }) {
     } finally {
       setLoading(false);
     }
-
-    setBookingConfirmed(true);
-    setLoading(false);
   };
 
   if (bookingConfirmed) {
