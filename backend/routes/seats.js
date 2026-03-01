@@ -25,6 +25,10 @@ router.post('/book', async (req, res) => {
       return res.status(400).json({ message: 'Seat already booked' });
     }
 
+    seat.isBooked = true;
+    seat.bookedBy = userId;
+    await seat.save();
+
     res.json({ message: 'Seat booked successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
