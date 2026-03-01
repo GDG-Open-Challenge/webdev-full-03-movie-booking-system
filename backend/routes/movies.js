@@ -4,7 +4,11 @@ const Movie = require('../models/Movie');
 
 router.get('/', async (req, res) => {
   try {
-    const movies = await Movie.find();
+    const now = new Date();
+    const movies = await Movie
+      .find({ showTime: { $gte: new Date() } })
+      .sort({ showTime: 1 });
+      
     res.json(movies);
   } catch (error) {
     res.status(500).json({ message: error.message });
