@@ -23,6 +23,10 @@ router.post("/", async (req, res) => {
     });
 
     await booking.save();
+    await Seat.updateMany(
+      { seatNumber: { $in: seats }, movieId: movieId },
+      { $set: { isBooked: true } },
+    );
 
     res.status(201).json(booking);
   } catch (error) {
