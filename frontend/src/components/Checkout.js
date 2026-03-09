@@ -9,13 +9,27 @@ function Checkout({ movie, seats, userId, onBack }) {
   const totalPrice = movie.price * seats.length;
 
   const handleConfirmBooking = async () => {
+  try {
     setLoading(true);
 
-    console.log('Booking confirmed with seats:', seats);
-    console.log('Total price:', totalPrice);
+    const response = await axios.post(
+      'http://localhost:5000/api/bookings',
+      {
+        movieId: movie._id,
+        userId,
+        seats,
+      }
+    );
+
+    console.log('Booking saved:', response.data);
 
     setBookingConfirmed(true);
+  } catch (error) {
+    console.error('Booking failed:', error);
+    alert('Booking failed. Please try again.');
+  } finally {
     setLoading(false);
+  }
   };
 
   if (bookingConfirmed) {
